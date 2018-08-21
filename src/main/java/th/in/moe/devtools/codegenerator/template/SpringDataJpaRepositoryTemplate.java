@@ -1,5 +1,8 @@
 package th.in.moe.devtools.codegenerator.template;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
@@ -15,7 +18,9 @@ import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
  * @Create: Jul 25, 2018
  */
 public class SpringDataJpaRepositoryTemplate implements Template {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(SpringDataJpaRepositoryTemplate.class);
+	
 	private static final String SPRING_CRUD_REPOSITORY_INTERFACE = "org.springframework.data.repository.CrudRepository";
 	private static final String REPOSITORY = "Repository";
 	
@@ -36,6 +41,8 @@ public class SpringDataJpaRepositoryTemplate implements Template {
 		JCodeModel crudRepositoryModel = new JCodeModel();
 		JDefinedClass crudRepositoryClass = crudRepositoryModel._class(fullyqualifiedName, ClassType.INTERFACE);
 		crudRepositoryClass._extends(springCrudRepositoryClass);
+		
+		logger.info("Generate {} Success", fullyqualifiedName);
 		
 		return crudRepositoryModel;
 	}

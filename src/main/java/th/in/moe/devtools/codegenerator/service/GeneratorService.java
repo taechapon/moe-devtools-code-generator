@@ -20,7 +20,7 @@ import th.in.moe.devtools.codegenerator.template.profile.ProfileTemplate;
  */
 public class GeneratorService {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(GeneratorService.class);
 	
 	private GeneratorDao generatorDao;
 	private GeneralDao generalDao;
@@ -38,7 +38,7 @@ public class GeneratorService {
 				throw new GeneratedException("databaserProductionName don't match with url");
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+			logger.warn("Invalid Database Connection URL: {}", dataSourceBean.getUrl());
 			throw new GeneratedException("Invalid Database Connection URL");
 		}
 	}
@@ -59,12 +59,14 @@ public class GeneratorService {
 	}
 	
 	public void genJavaFromTable(GeneratorCriteria criteria, List<TableBean> tableList) throws GeneratedException {
-		logger.info("genJavaFromTable");
+		logger.info("genJavaFromTable profile={}", criteria.getProfile());
 		
 		ProfileTemplate profileTemplate = GeneratorUtils.getProfileTemplate(criteria.getProfile());
 		for (TableBean table : tableList) {
 			profileTemplate.generate(criteria, table);
 		}
+		
+		logger.info("Generate Java Class succeeded!!");
 	}
 	
 }

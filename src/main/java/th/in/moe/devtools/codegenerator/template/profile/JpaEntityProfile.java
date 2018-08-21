@@ -19,7 +19,7 @@ import th.in.moe.devtools.codegenerator.template.JpaEntityTemplate;
  */
 public class JpaEntityProfile implements ProfileTemplate {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(JpaEntityProfile.class);
 	
 	private JpaEntityTemplate jpaEntityTemplate;
 	

@@ -19,7 +19,7 @@ import th.in.moe.devtools.codegenerator.template.PojoTemplate;
  */
 public class PojoProfile implements ProfileTemplate {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(PojoProfile.class);
 	
 	private PojoTemplate pojoTemplate;
 	

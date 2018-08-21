@@ -2,6 +2,9 @@ package th.in.moe.devtools.codegenerator.template;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
@@ -19,6 +22,8 @@ import th.in.moe.devtools.codegenerator.common.util.CodeModelUtils;
  * @Create: Jul 25, 2018
  */
 public class BuckwaJpaEntityTemplate implements Template {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BuckwaJpaEntityTemplate.class);
 	
 	private static final String BUCKWA_BASE_ENTITY_CLASS = "th.co.baiwa.buckwaframework.common.persistence.entity.BaseEntity";
 	
@@ -45,6 +50,8 @@ public class BuckwaJpaEntityTemplate implements Template {
 		if (criteria.isGenerateToStringMethodFlag()) {
 			CodeModelUtils.generateToStringMethod(entityModel, entityClass);
 		}
+		
+		logger.info("Generate {} Success", fullyqualifiedName);
 		
 		return entityModel;
 	}

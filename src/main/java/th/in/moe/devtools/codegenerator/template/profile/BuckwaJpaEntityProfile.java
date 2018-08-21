@@ -19,7 +19,7 @@ import th.in.moe.devtools.codegenerator.template.BuckwaJpaEntityTemplate;
  */
 public class BuckwaJpaEntityProfile implements ProfileTemplate {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final static Logger logger = LoggerFactory.getLogger(BuckwaJpaEntityProfile.class);
 	
 	private BuckwaJpaEntityTemplate buckwaJpaEntityTemplate;
 	

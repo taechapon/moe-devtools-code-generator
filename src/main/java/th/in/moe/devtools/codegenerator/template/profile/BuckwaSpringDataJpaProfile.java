@@ -20,7 +20,7 @@ import th.in.moe.devtools.codegenerator.template.BuckwaSpringDataJpaRepositoryTe
  */
 public class BuckwaSpringDataJpaProfile implements ProfileTemplate {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(BuckwaSpringDataJpaProfile.class);
 	
 	private BuckwaJpaEntityTemplate buckwaJpaEntityTemplate;
 	private BuckwaSpringDataJpaRepositoryTemplate buckwaSpringDataJpaRepositoryTemplate;

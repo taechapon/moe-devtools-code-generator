@@ -2,6 +2,9 @@ package th.in.moe.devtools.codegenerator.template;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
@@ -18,6 +21,8 @@ import th.in.moe.devtools.codegenerator.common.util.CodeModelUtils;
  * @Create: Sep 14, 2012
  */
 public class PojoTemplate implements Template {
+	
+	private static final Logger logger = LoggerFactory.getLogger(PojoTemplate.class);
 	
 	public JCodeModel execute(GeneratorCriteria criteria, TableBean table, Object... obj) throws JClassAlreadyExistsException {
 		
@@ -38,6 +43,8 @@ public class PojoTemplate implements Template {
 		if (criteria.isGenerateToStringMethodFlag()) {
 			CodeModelUtils.generateToStringMethod(pojoModel, pojoClass);
 		}
+		
+		logger.info("Generate {} Success", fullyqualifiedName);
 		
 		return pojoModel;
 	}

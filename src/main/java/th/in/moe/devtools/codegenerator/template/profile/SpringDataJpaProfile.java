@@ -20,7 +20,7 @@ import th.in.moe.devtools.codegenerator.template.SpringDataJpaRepositoryTemplate
  */
 public class SpringDataJpaProfile implements ProfileTemplate {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger logger = LoggerFactory.getLogger(SpringDataJpaProfile.class);
 	
 	private JpaEntityTemplate jpaEntityTemplate;
 	private SpringDataJpaRepositoryTemplate springDataJpaRepositoryTemplate;
