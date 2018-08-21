@@ -126,21 +126,24 @@
 			</plugin>
 			
 			<!-- Make this jar executable -->
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 				<artifactId>maven-jar-plugin</artifactId> -->
-<!-- 				<version>3.0.2</version> -->
-<!-- 				<configuration> -->
-<!-- 					<archive> -->
-<!-- 						<manifest> -->
-<!-- 							<addClasspath>true</addClasspath> -->
-<!-- 							<mainClass>th.co.pt.ldif.main.LDIFGeneratorMain</mainClass> -->
-<!-- 							<classpathPrefix>dependency-jars/</classpathPrefix> -->
-<!-- 						</manifest> -->
-<!-- 					</archive> -->
-<!-- 				</configuration> -->
-<!-- 			</plugin> -->
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>th.in.moe.devtools.codegenerator.MainApp</mainClass>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>lib/ojdbc8-12.2.0.1.jar</Class-Path>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			
 			<!-- Copy project dependency -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -157,42 +160,10 @@
 							<!-- runtime scope gives runtime and compile dependencies -->
 							<!-- compile scope gives compile, provided, and system dependencies -->
 							<includeScope>compile</includeScope>
-							<outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
+							<outputDirectory>${project.build.directory}/lib/</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<phase>test</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<copy
-									file="application.properties"
-									tofile="${project.build.directory}/application.properties"
-								/>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			
-			<plugin>
-				<groupId>com.zenjava</groupId>
-				<artifactId>javafx-maven-plugin</artifactId>
-				<version>8.8.3</version>
-				<configuration>
-					<mainClass>th.in.moe.devtools.codegenerator.MainApp</mainClass>
-				</configuration>
 			</plugin>
 			
 		</plugins>

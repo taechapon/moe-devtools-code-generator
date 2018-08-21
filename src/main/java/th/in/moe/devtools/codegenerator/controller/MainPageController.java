@@ -1,4 +1,4 @@
-package th.in.moe.devtools.codegenerator.view;
+package th.in.moe.devtools.codegenerator.controller;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Callback;
 import th.in.moe.devtools.codegenerator.MainApp;
@@ -106,8 +107,13 @@ public class MainPageController {
 		));
 		dbProductionNameComboBox.setItems(dbProductionNameList);
 		dbProductionNameComboBox.getSelectionModel().select(0);
+		
+		// DbSchema
+		dbSchemaField.setTooltip(MainPageTooltip.getDbSchema());
+		
 		// Table Pattern Name
 		dbTableNamePatternField.setText("%");
+		dbTableNamePatternField.setTooltip(MainPageTooltip.getTablePatternName());
 		
 		// Result Path
 		// http://java-buddy.blogspot.com/2013/03/javafx-simple-example-of.html
@@ -123,6 +129,15 @@ public class MainPageController {
 				}
 			}
 		});
+		
+		// Entity Package
+		resultEntityPackageField.setTooltip(MainPageTooltip.getEntityPackage());
+		
+		// Repository Package
+		resultRepositoryPackageField.setTooltip(MainPageTooltip.getRepositoryPackage());
+		
+		// Exclude Column
+		excludeColumnField.setTooltip(MainPageTooltip.getExcludeColumn());
 		
 		// Profile
 		profileComboBox.setItems(FXCollections.observableArrayList(ProfileTemplate.values()));
@@ -175,18 +190,6 @@ public class MainPageController {
 		});
 		// "Table Name" column
 		tableNameColumn.setCellValueFactory(cellData -> cellData.getValue().tableNameProperty());
-		
-		// TODO Debug
-//		dbProductionNameComboBox.setValue(DATABASE_PRODUCTION_NAME.MYSQL);
-//		dbUrlField.setText("jdbc:mysql://localhost:3306/buckwa_framework");
-//		dbUsernameField.setText("root");
-//		dbPasswordField.setText("root");
-		dbProductionNameComboBox.setValue(DATABASE_PRODUCTION_NAME.ORACLE);
-		dbUrlField.setText("jdbc:oracle:thin:@150.95.24.42:1521:orcl");
-		dbUsernameField.setText("exciseadm");
-		dbPasswordField.setText("exciseadm");
-		dbSchemaField.setText("EXCISEADM");
-		
 	}
 	
 	public CheckBox getSelectAllCheckBox() {
@@ -208,7 +211,7 @@ public class MainPageController {
 	}
 	
 	@FXML
-    private void handleTestConnection() {
+	private void handleTestConnection() {
 		GeneratorCriteria criteria = bindingModel();
 		
 		try {
@@ -233,7 +236,7 @@ public class MainPageController {
 	}
 	
 	@FXML
-    private void handleFetchTable() {
+	private void handleFetchTable() {
 		GeneratorCriteria criteria = bindingModel();
 		
 		try {
@@ -262,16 +265,16 @@ public class MainPageController {
 		}
 	}
 	
-    @FXML
-    private void handleGenerate() {
-    	GeneratorCriteria criteria = bindingModel();
-    	String errorMsg = validateCriteria(criteria);
-    	if (StringUtils.isEmpty(errorMsg)) {
-    		try {
-    			// Check Connection
-    			generatorService.testDbConnection(criteria.getDatasourceBean());
-    			
-    			List<String> tableNameList = new ArrayList<>();
+	@FXML
+	private void handleGenerate() {
+		GeneratorCriteria criteria = bindingModel();
+		String errorMsg = validateCriteria(criteria);
+		if (StringUtils.isEmpty(errorMsg)) {
+			try {
+				// Check Connection
+				generatorService.testDbConnection(criteria.getDatasourceBean());
+				
+				List<String> tableNameList = new ArrayList<>();
 				ObservableList<TableModel> tableModelList = tableNameTableView.getItems();
 				for (TableModel tableModel : tableModelList) {
 					if (tableModel.getSelected()) {
@@ -302,19 +305,19 @@ public class MainPageController {
 				DialogUtils.createExpandableException(alert, e);
 				alert.showAndWait();
 			}
-    	} else {
-    		// Show Error Alert
+		} else {
+			// Show Error Alert
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.initOwner(mainApp.getPrimaryStage());
 			alert.setTitle("Warning");
 			alert.setHeaderText(null);
 			alert.setContentText(errorMsg);
 			alert.showAndWait();
-    	}
-    }
-    
-    private GeneratorCriteria bindingModel() {
-    	DatasourceBean datasourceBean = new DatasourceBean();
+		}
+	}
+	
+	private GeneratorCriteria bindingModel() {
+		DatasourceBean datasourceBean = new DatasourceBean();
 		datasourceBean.setDatabaseProductionName(dbProductionNameComboBox.getValue());
 		datasourceBean.setUrl(dbUrlField.getText());
 		datasourceBean.setUsername(dbUsernameField.getText());
@@ -334,35 +337,84 @@ public class MainPageController {
 		criteria.setGenerateToStringMethodFlag(generateToStringMethodCheckBox.isSelected());
 		
 		return criteria;
-    }
-    
-    private String validateCriteria(GeneratorCriteria criteria) {
-    	List<String> errorMsgList = new ArrayList<>();
-    	if (tableNameTableView.getItems().size() == 0) {
-    		errorMsgList.add("Pleach select TableName for generate.");
-    	}
-    	if (RESULT_PATH_LABEL_INIT_TEXT.equals(resultPathLabel.getText())) {
-    		errorMsgList.add("Result Path is empty.");
-    	}
-    	if (StringUtils.isEmpty(resultEntityPackageField.getText())) {
-    		errorMsgList.add("Entity Package is empty.");
-    	}
-    	if (ProfileTemplate.SPRING_DATA_JPA.equals(profileComboBox.getValue())
-    			|| ProfileTemplate.BUCKWA_SPRING_DATA_JPA.equals(profileComboBox.getValue())) {
-    		if (StringUtils.isEmpty(resultRepositoryPackageField.getText())) {
-    			errorMsgList.add("Repository Package is empty.");
-    		}
-    	}
-    	
-    	StringBuilder errorMsg = new StringBuilder();
-    	for (int i = 0; i < errorMsgList.size(); i++) {
+	}
+	
+	private String validateCriteria(GeneratorCriteria criteria) {
+		List<String> errorMsgList = new ArrayList<>();
+		if (tableNameTableView.getItems().size() == 0) {
+			errorMsgList.add("Pleach select TableName for generate.");
+		}
+		if (RESULT_PATH_LABEL_INIT_TEXT.equals(resultPathLabel.getText())) {
+			errorMsgList.add("Result Path is empty.");
+		}
+		if (StringUtils.isEmpty(resultEntityPackageField.getText())) {
+			errorMsgList.add("Entity Package is empty.");
+		}
+		if (ProfileTemplate.SPRING_DATA_JPA.equals(profileComboBox.getValue()) || ProfileTemplate.BUCKWA_SPRING_DATA_JPA.equals(profileComboBox.getValue())) {
+			if (StringUtils.isEmpty(resultRepositoryPackageField.getText())) {
+				errorMsgList.add("Repository Package is empty.");
+			}
+		}
+		
+		StringBuilder errorMsg = new StringBuilder();
+		for (int i = 0; i < errorMsgList.size(); i++) {
 			errorMsg.append(errorMsgList.get(i));
 			if (i < errorMsgList.size() - 1) {
 				errorMsg.append(System.lineSeparator());
 			}
 		}
-    	
-    	return errorMsg.toString();
-    }
-    
+		
+		return errorMsg.toString();
+	}
+	
+	// Tooltip
+	private static class MainPageTooltip {
+		
+		public static final Tooltip getDbSchema() {
+			Tooltip tooltip = new Tooltip();
+			tooltip.setText(
+				"In Oracle will be same with Username"
+			);
+			return tooltip;
+		}
+		
+		public static final Tooltip getTablePatternName() {
+			Tooltip tooltip = new Tooltip();
+			tooltip.setText(
+				"Example:\n" +
+				"% = All Table\n" +
+				"ADM_% = prefix with 'ADM_'"
+			);
+			return tooltip;
+		}
+		
+		public static final Tooltip getEntityPackage() {
+			Tooltip tooltip = new Tooltip();
+			tooltip.setText(
+				"Example:\n" +
+				"th.in.moe.project.module.persistence.entity"
+			);
+			return tooltip;
+		}
+		
+		public static final Tooltip getRepositoryPackage() {
+			Tooltip tooltip = new Tooltip();
+			tooltip.setText(
+				"Example:\n" +
+				"th.in.moe.project.module.persistence.repository"
+			);
+			return tooltip;
+		}
+		
+		public static final Tooltip getExcludeColumn() {
+			Tooltip tooltip = new Tooltip();
+			tooltip.setText(
+				"Example:\n" +
+				"IS_DELETED,VERSION,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATED_DATE"
+			);
+			return tooltip;
+		}
+		
+	}
+	
 }
