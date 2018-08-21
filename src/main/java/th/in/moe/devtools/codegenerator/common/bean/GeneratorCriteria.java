@@ -15,8 +15,7 @@ public class GeneratorCriteria {
 	private String resultRepositoryPackage;
 	private List<String> excludeColumn;
 	private ProfileTemplate profile;
-	private boolean generateGeneratedValueFlag;
-	private boolean generateToStringMethodFlag;
+	private String toStringMethodStyle;
 
 	public DatasourceBean getDatasourceBean() {
 		return datasourceBean;
@@ -90,20 +89,12 @@ public class GeneratorCriteria {
 		this.profile = profile;
 	}
 
-	public boolean isGenerateGeneratedValueFlag() {
-		return generateGeneratedValueFlag;
+	public String getToStringMethodStyle() {
+		return toStringMethodStyle;
 	}
 
-	public void setGenerateGeneratedValueFlag(boolean generateGeneratedValueFlag) {
-		this.generateGeneratedValueFlag = generateGeneratedValueFlag;
-	}
-
-	public boolean isGenerateToStringMethodFlag() {
-		return generateToStringMethodFlag;
-	}
-
-	public void setGenerateToStringMethodFlag(boolean generateToStringMethodFlag) {
-		this.generateToStringMethodFlag = generateToStringMethodFlag;
+	public void setToStringMethodStyle(String toStringMethodStyle) {
+		this.toStringMethodStyle = toStringMethodStyle;
 	}
 
 }

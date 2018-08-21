@@ -13,6 +13,7 @@ import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
 import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant;
 import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.ProfileTemplate;
+import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.TO_STRING_STYLE;
 import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
 
 public class GeneratorServiceTestMySQL {
@@ -38,8 +39,7 @@ public class GeneratorServiceTestMySQL {
 		criteria.setResultRepositoryPackage("com.ss.erp.ap.persistence.repository");
 		criteria.setExcludeColumn(Arrays.asList("IS_DELETED","VERSION","CREATED_BY","CREATED_DATE","UPDATED_BY","UPDATED_DATE"));
 		criteria.setProfile(ProfileTemplate.BUCKWA_SPRING_DATA_JPA);
-		criteria.setGenerateGeneratedValueFlag(Boolean.TRUE);
-		criteria.setGenerateToStringMethodFlag(Boolean.TRUE);
+		criteria.setToStringMethodStyle(TO_STRING_STYLE.JSON_STYLE);
 		
 		generatorService = new GeneratorService();
 	}

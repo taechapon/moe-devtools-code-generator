@@ -27,4 +27,15 @@ public class GeneratorConstant {
 		BUCKWA_SPRING_DATA_JPA;
 	}
 	
+	public static final class TO_STRING_STYLE {
+		public static final String NONE = "NONE";
+		public static final String DEFAULT_STYLE = "DEFAULT_STYLE";
+		public static final String JSON_STYLE = "JSON_STYLE";
+		public static final String MULTI_LINE_STYLE = "MULTI_LINE_STYLE";
+		public static final String NO_CLASS_NAME_STYLE = "NO_CLASS_NAME_STYLE";
+		public static final String NO_FIELD_NAMES_STYLE = "NO_FIELD_NAMES_STYLE";
+		public static final String SHORT_PREFIX_STYLE = "SHORT_PREFIX_STYLE";
+		public static final String SIMPLE_STYLE = "SIMPLE_STYLE";
+	}
+	
 }

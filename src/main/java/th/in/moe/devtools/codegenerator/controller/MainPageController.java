@@ -34,6 +34,7 @@ import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
 import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.DATABASE_PRODUCTION_NAME;
 import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.ProfileTemplate;
+import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.TO_STRING_STYLE;
 import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
 import th.in.moe.devtools.codegenerator.common.util.DialogUtils;
 import th.in.moe.devtools.codegenerator.model.TableModel;
@@ -71,9 +72,7 @@ public class MainPageController {
 	@FXML
 	private ComboBox<ProfileTemplate> profileComboBox;
 	@FXML
-	private CheckBox generateGeneratedValueCheckBox;
-	@FXML
-	private CheckBox generateToStringMethodCheckBox;
+	private ComboBox<String> toStringMethodComboBox;
 	@FXML
 	private TableView<TableModel> tableNameTableView;
 	@FXML
@@ -101,11 +100,10 @@ public class MainPageController {
 		generatorService = new GeneratorService();
 		
 		// Database
-		ObservableList<String> dbProductionNameList = FXCollections.observableArrayList(Arrays.asList(
+		dbProductionNameComboBox.setItems(FXCollections.observableArrayList(Arrays.asList(
 			DATABASE_PRODUCTION_NAME.MYSQL,
 			DATABASE_PRODUCTION_NAME.ORACLE
-		));
-		dbProductionNameComboBox.setItems(dbProductionNameList);
+		)));
 		dbProductionNameComboBox.getSelectionModel().select(0);
 		
 		// DbSchema
@@ -142,6 +140,20 @@ public class MainPageController {
 		// Profile
 		profileComboBox.setItems(FXCollections.observableArrayList(ProfileTemplate.values()));
 		profileComboBox.getSelectionModel().select(0);
+		
+		// ToString Method
+		toStringMethodComboBox.setItems(FXCollections.observableArrayList(Arrays.asList(
+			TO_STRING_STYLE.NONE,
+			TO_STRING_STYLE.DEFAULT_STYLE,
+			TO_STRING_STYLE.JSON_STYLE,
+			TO_STRING_STYLE.MULTI_LINE_STYLE,
+			TO_STRING_STYLE.NO_CLASS_NAME_STYLE,
+			TO_STRING_STYLE.NO_FIELD_NAMES_STYLE,
+			TO_STRING_STYLE.SHORT_PREFIX_STYLE,
+			TO_STRING_STYLE.SIMPLE_STYLE
+		)));
+		toStringMethodComboBox.getSelectionModel().select(0);
+		toStringMethodComboBox.setTooltip(MainPageTooltip.getToStringMethod());
 		
 		// TableNameView
 		// "Selected" column
@@ -333,8 +345,7 @@ public class MainPageController {
 		criteria.setResultRepositoryPackage(resultRepositoryPackageField.getText());
 		criteria.setExcludeColumn(Arrays.asList(excludeColumnField.getText()));
 		criteria.setProfile(profileComboBox.getValue());
-		criteria.setGenerateGeneratedValueFlag(generateGeneratedValueCheckBox.isSelected());
-		criteria.setGenerateToStringMethodFlag(generateToStringMethodCheckBox.isSelected());
+		criteria.setToStringMethodStyle(toStringMethodComboBox.getValue());
 		
 		return criteria;
 	}
@@ -411,6 +422,20 @@ public class MainPageController {
 			tooltip.setText(
 				"Example:\n" +
 				"IS_DELETED,VERSION,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATED_DATE"
+			);
+			return tooltip;
+		}
+		
+		public static final Tooltip getToStringMethod() {
+			Tooltip tooltip = new Tooltip();
+			tooltip.setText(
+				"Generate 'toString' method from org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString()\n" +
+				"with style in org.apache.commons.lang3.builder.ToStringStyle\n" +
+				"\n" +
+				"Example Result:\n" +
+				"public String toString() {\n" +
+				"\treturn ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);\n" +
+				"}"
 			);
 			return tooltip;
 		}

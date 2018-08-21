@@ -14,6 +14,7 @@ import com.sun.codemodel.JMod;
 import th.in.moe.devtools.codegenerator.common.bean.ColumnBean;
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
+import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.TO_STRING_STYLE;
 import th.in.moe.devtools.codegenerator.common.util.CodeModelUtils;
 
 /*
@@ -40,8 +41,8 @@ public class PojoTemplate implements Template {
 		generateColumnField(criteria, pojoClass, table.getColumnList());
 		
 		// Generate toString()
-		if (criteria.isGenerateToStringMethodFlag()) {
-			CodeModelUtils.generateToStringMethod(pojoModel, pojoClass);
+		if (!TO_STRING_STYLE.NONE.equals(criteria.getToStringMethodStyle())) {
+			CodeModelUtils.generateToStringMethod(pojoModel, pojoClass, criteria.getToStringMethodStyle());
 		}
 		
 		logger.info("Generate {} Success", fullyqualifiedName);

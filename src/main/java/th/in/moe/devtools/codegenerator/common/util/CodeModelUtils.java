@@ -60,14 +60,14 @@ public abstract class CodeModelUtils {
 	
 	// Generate toString() by using ToStringBuilder from Apache Common
 	// result: ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
-	public static JMethod generateToStringMethod(JCodeModel codeModel, JDefinedClass jDefinedClass) {
+	public static JMethod generateToStringMethod(JCodeModel codeModel, JDefinedClass jDefinedClass, String toStringStyle) {
 		JMethod toStringMethod = jDefinedClass.method(JMod.PUBLIC, String.class, "toString");
 		JBlock toStringBlock = toStringMethod.body();
 		JClass toStringBuilderClass = codeModel.ref(org.apache.commons.lang3.builder.ToStringBuilder.class);
 		JClass toStringStyleClass = codeModel.ref(org.apache.commons.lang3.builder.ToStringStyle.class);
 		JInvocation toStringBuilder = toStringBuilderClass.staticInvoke("reflectionToString")
 			.arg(JExpr._this())
-			.arg(toStringStyleClass.staticRef("JSON_STYLE"));
+			.arg(toStringStyleClass.staticRef(toStringStyle));
 		toStringBlock._return(toStringBuilder);
 		return toStringMethod;
 	}

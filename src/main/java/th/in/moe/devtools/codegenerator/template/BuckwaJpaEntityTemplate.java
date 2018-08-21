@@ -15,6 +15,7 @@ import com.sun.codemodel.JMod;
 import th.in.moe.devtools.codegenerator.common.bean.ColumnBean;
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
+import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.TO_STRING_STYLE;
 import th.in.moe.devtools.codegenerator.common.util.CodeModelUtils;
 
 /*
@@ -47,8 +48,8 @@ public class BuckwaJpaEntityTemplate implements Template {
 		generateColumnField(criteria, entityClass, table.getTableName(), table.getColumnList());
 		
 		// Generate toString()
-		if (criteria.isGenerateToStringMethodFlag()) {
-			CodeModelUtils.generateToStringMethod(entityModel, entityClass);
+		if (!TO_STRING_STYLE.NONE.equals(criteria.getToStringMethodStyle())) {
+			CodeModelUtils.generateToStringMethod(entityModel, entityClass, criteria.getToStringMethodStyle());
 		}
 		
 		logger.info("Generate {} Success", fullyqualifiedName);
@@ -63,9 +64,7 @@ public class BuckwaJpaEntityTemplate implements Template {
 				JFieldVar field = entityClass.field(JMod.PRIVATE, column.getJavaType(), column.getJavaName());
 				if (column.isPrimaryKey()) {
 					field.annotate(javax.persistence.Id.class);
-					if (criteria.isGenerateGeneratedValueFlag()) {
-						CodeModelUtils.generateJpaPrimaryKeyAnnotation(field, criteria.getDatasourceBean().getDatabaseProductionName(), tableName);
-					}
+					CodeModelUtils.generateJpaPrimaryKeyAnnotation(field, criteria.getDatasourceBean().getDatabaseProductionName(), tableName);
 				}
 				field.annotate(javax.persistence.Column.class).param("name", column.getColumnName());
 				
