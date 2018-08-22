@@ -89,10 +89,6 @@
             <Label text="Exclude Column:" GridPane.rowIndex="3" />
             <Label text="Profile:" GridPane.rowIndex="4" />
             <Label text="toString Method:" GridPane.rowIndex="5" />
-            <TextField fx:id="resultEntityPackageField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="resultRepositoryPackageField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="excludeColumnField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <ComboBox fx:id="profileComboBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <GridPane GridPane.columnIndex="1">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="240.0" />
@@ -106,6 +102,10 @@
                   <Button fx:id="resultPathButton" mnemonicParsing="false" text="Browse..." GridPane.columnIndex="1" />
                </children>
             </GridPane>
+            <TextField fx:id="resultEntityPackageField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="resultRepositoryPackageField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="excludeColumnField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="profileComboBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ComboBox fx:id="toStringMethodComboBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
@@ -115,6 +115,11 @@
           <TableColumn fx:id="tableNameColumn" editable="false" prefWidth="260.0" text="Table Name" />
         </columns>
       </TableView>
-    <Button layoutX="368.0" layoutY="448.0" mnemonicParsing="false" onAction="#handleGenerate" text="Generate" />
+      <ButtonBar layoutX="260.0" layoutY="434.0" prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#handleClear" text="Clear" />
+          <Button mnemonicParsing="false" onAction="#handleGenerate" text="Generate" />
+        </buttons>
+      </ButtonBar>
    </children>
 </AnchorPane>

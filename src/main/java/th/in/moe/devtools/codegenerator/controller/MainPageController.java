@@ -3,6 +3,8 @@ package th.in.moe.devtools.codegenerator.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -104,13 +106,11 @@ public class MainPageController {
 			DATABASE_PRODUCTION_NAME.MYSQL,
 			DATABASE_PRODUCTION_NAME.ORACLE
 		)));
-		dbProductionNameComboBox.getSelectionModel().select(0);
 		
 		// DbSchema
 		dbSchemaField.setTooltip(MainPageTooltip.getDbSchema());
 		
 		// Table Pattern Name
-		dbTableNamePatternField.setText("%");
 		dbTableNamePatternField.setTooltip(MainPageTooltip.getTablePatternName());
 		
 		// Result Path
@@ -139,7 +139,6 @@ public class MainPageController {
 		
 		// Profile
 		profileComboBox.setItems(FXCollections.observableArrayList(ProfileTemplate.values()));
-		profileComboBox.getSelectionModel().select(0);
 		
 		// ToString Method
 		toStringMethodComboBox.setItems(FXCollections.observableArrayList(Arrays.asList(
@@ -152,7 +151,6 @@ public class MainPageController {
 			TO_STRING_STYLE.SHORT_PREFIX_STYLE,
 			TO_STRING_STYLE.SIMPLE_STYLE
 		)));
-		toStringMethodComboBox.getSelectionModel().select(0);
 		toStringMethodComboBox.setTooltip(MainPageTooltip.getToStringMethod());
 		
 		// TableNameView
@@ -202,6 +200,26 @@ public class MainPageController {
 		});
 		// "Table Name" column
 		tableNameColumn.setCellValueFactory(cellData -> cellData.getValue().tableNameProperty());
+	}
+	
+	@FXML
+	public void initForm() {
+		dbProductionNameComboBox.getSelectionModel().select(0);
+		dbUrlField.setText(null);
+		dbUsernameField.setText(null);
+		dbPasswordField.setText(null);
+		dbCatalogField.setText(null);
+		dbSchemaField.setText(null);
+		dbTableNamePatternField.setText("%");
+		
+		resultPathLabel.setText(RESULT_PATH_LABEL_INIT_TEXT);
+		resultEntityPackageField.setText(null);
+		resultRepositoryPackageField.setText(null);
+		excludeColumnField.setText(null);
+		profileComboBox.getSelectionModel().select(0);
+		toStringMethodComboBox.getSelectionModel().select(0);
+		
+		tableNameTableView.getItems().clear();
 	}
 	
 	public CheckBox getSelectAllCheckBox() {
@@ -328,7 +346,12 @@ public class MainPageController {
 		}
 	}
 	
-	private GeneratorCriteria bindingModel() {
+	@FXML
+	public void handleClear() {
+		initForm();
+	}
+	
+	public GeneratorCriteria bindingModel() {
 		DatasourceBean datasourceBean = new DatasourceBean();
 		datasourceBean.setDatabaseProductionName(dbProductionNameComboBox.getValue());
 		datasourceBean.setUrl(dbUrlField.getText());
@@ -343,7 +366,7 @@ public class MainPageController {
 		criteria.setResultPath(resultPathLabel.getText());
 		criteria.setResultEntityPackage(resultEntityPackageField.getText());
 		criteria.setResultRepositoryPackage(resultRepositoryPackageField.getText());
-		criteria.setExcludeColumn(Arrays.asList(excludeColumnField.getText()));
+		criteria.setExcludeColumn(commaDelimitedListToList(excludeColumnField.getText()));
 		criteria.setProfile(profileComboBox.getValue());
 		criteria.setToStringMethodStyle(toStringMethodComboBox.getValue());
 		
@@ -376,6 +399,25 @@ public class MainPageController {
 		}
 		
 		return errorMsg.toString();
+	}
+	
+	public void bindingField(GeneratorCriteria criteria) {
+		dbProductionNameComboBox.getSelectionModel().select(criteria.getDatasourceBean().getDatabaseProductionName());
+		dbUrlField.setText(criteria.getDatasourceBean().getUrl());
+		dbUsernameField.setText(criteria.getDatasourceBean().getUsername());
+		dbPasswordField.setText(criteria.getDatasourceBean().getPassword());
+		dbCatalogField.setText(criteria.getDbCatalog());
+		dbSchemaField.setText(criteria.getDbSchema());
+		dbTableNamePatternField.setText(criteria.getDbTableNamePattern());
+		
+		resultPathLabel.setText(criteria.getResultPath());
+		resultEntityPackageField.setText(criteria.getResultEntityPackage());
+		resultRepositoryPackageField.setText(criteria.getResultRepositoryPackage());
+		excludeColumnField.setText(collectionToDelimitedString(criteria.getExcludeColumn()));
+		profileComboBox.getSelectionModel().select(criteria.getProfile());
+		toStringMethodComboBox.getSelectionModel().select(criteria.getToStringMethodStyle());
+		
+		tableNameTableView.getItems().clear();
 	}
 	
 	// Tooltip
@@ -440,6 +482,34 @@ public class MainPageController {
 			return tooltip;
 		}
 		
+	}
+	
+	private String collectionToDelimitedString(Collection<?> collection) {
+		if (collection == null || collection.isEmpty()) {
+			return "";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		Iterator<?> it = collection.iterator();
+		while (it.hasNext()) {
+			sb.append(it.next());
+			if (it.hasNext()) {
+				sb.append(",");
+			}
+		}
+		return sb.toString();
+	}
+	
+	private static List<String> commaDelimitedListToList(String str) {
+		if (str == null) {
+			return new ArrayList<>();
+		}
+		String tmp[] = str.split(",");
+		List<String> list = new ArrayList<>();
+		for (String string : tmp) {
+			list.add(StringUtils.trim(string));
+		}
+		return list;
 	}
 	
 }

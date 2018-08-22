@@ -2,8 +2,11 @@ package th.in.moe.devtools.codegenerator.common.bean;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.ProfileTemplate;
 
+@XmlRootElement
 public class GeneratorCriteria {
 
 	private DatasourceBean datasourceBean;
