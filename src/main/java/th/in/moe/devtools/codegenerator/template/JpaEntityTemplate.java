@@ -56,7 +56,7 @@ public class JpaEntityTemplate implements Template {
 	
 	private void generateColumnField(GeneratorCriteria criteria, JDefinedClass entityClass, String tableName, List<ColumnBean> columnList) {
 		for (ColumnBean column : columnList) {
-			if (!criteria.getExcludeColumn().contains(column.getColumnName())) {
+			if (column.isGenerateFlag()) {
 				// Generate Field
 				JFieldVar field = entityClass.field(JMod.PRIVATE, column.getJavaType(), column.getJavaName());
 				if (column.isPrimaryKey()) {

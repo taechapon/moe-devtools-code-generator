@@ -52,7 +52,7 @@ public class PojoTemplate implements Template {
 	
 	private void generateColumnField(GeneratorCriteria criteria, JDefinedClass pojoClass, List<ColumnBean> columnList) {
 		for (ColumnBean column : columnList) {
-			if (!criteria.getExcludeColumn().contains(column.getColumnName())) {
+			if (column.isGenerateFlag()) {
 				// Generate Field
 				pojoClass.field(JMod.PRIVATE, column.getJavaType(), column.getJavaName());
 				

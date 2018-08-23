@@ -122,6 +122,10 @@ public class GeneratorDao {
 						column.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(column.getColumnName()));
 						column.setJavaType(dbTypeConverter.convert(column.getDataType(), column.getTypeName()));
 						
+						if (!criteria.getExcludeColumn().contains(column.getColumnName())) {
+							column.setGenerateFlag(Boolean.TRUE);
+						}
+						
 						if (index == -1) {
 							columnList.add(column);
 						}

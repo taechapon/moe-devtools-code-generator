@@ -23,6 +23,7 @@ public class ColumnBean {
 	private String isNullable;
 	private String isAutoIncrement;
 	// Java
+	private boolean generateFlag;
 	private String javaName;
 	private Class<?> javaType;
 	private boolean primaryKey;
@@ -123,6 +124,14 @@ public class ColumnBean {
 		this.isAutoIncrement = isAutoIncrement;
 	}
 
+	public boolean isGenerateFlag() {
+		return generateFlag;
+	}
+
+	public void setGenerateFlag(boolean generateFlag) {
+		this.generateFlag = generateFlag;
+	}
+
 	public String getJavaName() {
 		return javaName;
 	}
@@ -148,27 +157,33 @@ public class ColumnBean {
 	}
 
 	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((columnName == null) ? 0 : columnName.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		ColumnBean other = (ColumnBean) obj;
 		if (columnName == null) {
-			if (other.columnName != null) {
+			if (other.columnName != null)
 				return false;
-			}
-		} else if (!columnName.equals(other.columnName)) {
+		} else if (!columnName.equals(other.columnName))
 			return false;
-		}
 		return true;
 	}
 
