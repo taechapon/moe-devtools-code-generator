@@ -3,6 +3,7 @@ package th.in.moe.devtools.codegenerator.service;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.BeforeClass;
@@ -37,7 +38,7 @@ public class GeneratorServiceTestMySQL {
 		criteria.setResultPath("./src/test/java");
 		criteria.setResultEntityPackage("com.ss.erp.ap.persistence.entity");
 		criteria.setResultRepositoryPackage("com.ss.erp.ap.persistence.repository");
-		criteria.setExcludeColumn(Arrays.asList("IS_DELETED","VERSION","CREATED_BY","CREATED_DATE","UPDATED_BY","UPDATED_DATE"));
+		criteria.setExcludeColumn(Arrays.asList("is_deleted","version","created_by","created_date","updated_by","updated_date"));
 		criteria.setProfile(ProfileTemplate.BUCKWA_SPRING_DATA_JPA);
 		criteria.setToStringMethodStyle(TO_STRING_STYLE.JSON_STYLE);
 		
@@ -45,9 +46,11 @@ public class GeneratorServiceTestMySQL {
 	}
 	
 	@Test
-	public void test_getAllTableName() throws GeneratedException {
-		List<String> tableNameList = generatorService.getAllTableName(criteria);
-		tableNameList.forEach(System.out::println);
+	public void test_getAllTableName() throws GeneratedException, Exception {
+//		List<String> tableNameList = generatorService.getAllTableName(criteria);
+//		tableNameList.forEach(System.out::println);
+		System.out.println(Class.forName("java.lang.Integer"));
+		System.out.println(Integer.class);
 	}
 	
 	//@Test

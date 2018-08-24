@@ -115,9 +115,10 @@
           <TableColumn fx:id="tableNameColumn" editable="false" prefWidth="260.0" text="Table Name" />
         </columns>
       </TableView>
-      <ButtonBar layoutX="260.0" layoutY="434.0" prefHeight="40.0" prefWidth="200.0">
+      <ButtonBar layoutX="195.0" layoutY="434.0" prefHeight="40.0" prefWidth="200.0">
         <buttons>
           <Button mnemonicParsing="false" onAction="#handleClear" text="Clear" />
+          <Button mnemonicParsing="false" onAction="#handlePreview" text="Preview" />
           <Button mnemonicParsing="false" onAction="#handleGenerate" text="Generate" />
         </buttons>
       </ButtonBar>

@@ -2,6 +2,7 @@ package th.in.moe.devtools.codegenerator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -17,9 +18,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
+import th.in.moe.devtools.codegenerator.common.bean.TableBean;
 import th.in.moe.devtools.codegenerator.common.util.DialogUtils;
+import th.in.moe.devtools.codegenerator.controller.GenerateEditDialogController;
 import th.in.moe.devtools.codegenerator.controller.MainPageController;
 import th.in.moe.devtools.codegenerator.controller.RootLayoutController;
 
@@ -64,7 +68,7 @@ public class MainApp extends Application {
 			
 			primaryStage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -87,9 +91,49 @@ public class MainApp extends Application {
 			// Set MainPage into the center of RootLayout.
 			rootLayout.setCenter(mainPage);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
+	
+	/**
+	 * Opens a dialog to edit details for the specified table with column.
+	 * 
+	 * @param table list for generate
+	 * @return true if the user clicked OK, false otherwise.
+	 */
+	public boolean showGenerateEditDialog(GeneratorCriteria criteria, List<TableBean> tableBeanList) {
+		try {
+			// Load the fxml file and create a new stage for the popup dialog.
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("/view/GenerateEditDialog.fxml"));
+			AnchorPane page = (AnchorPane) loader.load();
+			
+			// Create the dialog Stage.
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Generate Custom Entities");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
+			Scene scene = new Scene(page);
+			dialogStage.setScene(scene);
+			
+			// Set the person into the controller.
+			GenerateEditDialogController controller = loader.getController();
+			controller.init(criteria, tableBeanList);
+			controller.setDialogStage(dialogStage);
+			
+			// Set the dialog icon.
+//			dialogStage.getIcons().add(new Image("file:resources/images/edit.png"));
+			
+			// Show the dialog and wait until the user closes it
+			dialogStage.showAndWait();
+			
+			return controller.isOkClicked();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			return false;
+		}
+	}
+	
 	
 	public void initGeneratorCriteria() {
 		MainPageController controller =  (MainPageController) rootLayout.getCenter().getUserData();

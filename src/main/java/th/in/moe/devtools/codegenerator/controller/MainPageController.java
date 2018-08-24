@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -313,8 +311,6 @@ public class MainPageController {
 				}
 				
 				List<TableBean> tableBeanList = generatorService.getTableDescribe(criteria, tableNameList);
-				tableBeanList.forEach(t -> System.out.println(ToStringBuilder.reflectionToString(t, ToStringStyle.JSON_STYLE)));
-				
 				generatorService.genJavaFromTable(criteria, tableBeanList);
 				
 				// Show Information Alert
@@ -324,6 +320,48 @@ public class MainPageController {
 				alert.setHeaderText(null);
 				alert.setContentText("Generate Java Class succeeded!!");
 				alert.showAndWait();
+				
+			} catch (GeneratedException e) {
+				// Show Error Alert
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.initOwner(mainApp.getPrimaryStage());
+				alert.setTitle("Error");
+				alert.setHeaderText(null);
+				alert.setContentText(e.getMessage());
+				DialogUtils.createExpandableException(alert, e);
+				alert.showAndWait();
+			}
+		} else {
+			// Show Error Alert
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.initOwner(mainApp.getPrimaryStage());
+			alert.setTitle("Warning");
+			alert.setHeaderText(null);
+			alert.setContentText(errorMsg);
+			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	private void handlePreview() {
+		GeneratorCriteria criteria = bindingModel();
+		String errorMsg = validateCriteria(criteria);
+		if (StringUtils.isEmpty(errorMsg)) {
+			try {
+				// Check Connection
+				generatorService.testDbConnection(criteria.getDatasourceBean());
+				
+				List<String> tableNameList = new ArrayList<>();
+				ObservableList<TableModel> tableModelList = tableNameTableView.getItems();
+				for (TableModel tableModel : tableModelList) {
+					if (tableModel.getSelected()) {
+						tableNameList.add(tableModel.getTableName());
+					}
+				}
+				
+				List<TableBean> tableBeanList = generatorService.getTableDescribe(criteria, tableNameList);
+				
+				mainApp.showGenerateEditDialog(criteria, tableBeanList);
 				
 			} catch (GeneratedException e) {
 				// Show Error Alert

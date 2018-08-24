@@ -71,7 +71,7 @@ public class GeneratorService {
 				keyColumnBean.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(keyColumnBean.getColumnName()));
 				keyColumnBean.setJavaType(dbTypeConverter.convert(keyColumnBean.getDataType(), keyColumnBean.getTypeName()));
 			}
-			for (ColumnBean columnBean : tableBean.getKeyList()) {
+			for (ColumnBean columnBean : tableBean.getColumnList()) {
 				columnBean.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(columnBean.getColumnName()));
 				columnBean.setJavaType(dbTypeConverter.convert(columnBean.getDataType(), columnBean.getTypeName()));
 				if (!criteria.getExcludeColumn().contains(columnBean.getColumnName())) {
