@@ -16,9 +16,6 @@ import th.in.moe.devtools.codegenerator.common.bean.DatasourceBean;
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
 import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
-import th.in.moe.devtools.codegenerator.common.util.JdbcUtils;
-import th.in.moe.devtools.codegenerator.common.util.NameUtils;
-import th.in.moe.devtools.codegenerator.typeconvert.DbTypeConverter;
 
 /*
  * @Author: Taechapon Himarat (Su)
@@ -27,12 +24,6 @@ import th.in.moe.devtools.codegenerator.typeconvert.DbTypeConverter;
 public class GeneratorDao {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GeneratorDao.class);
-	
-	private DbTypeConverter dbTypeConverter;
-	
-	public void setDbTypeConverter(DbTypeConverter dbTypeConverter) {
-		this.dbTypeConverter = dbTypeConverter;
-	}
 	
 	public List<String> getAllTableName(GeneratorCriteria criteria) throws GeneratedException {
 		logger.info("getAllTableName schemaPattern={}, tableNamePattern={}", criteria.getDbSchema(), criteria.getDbTableNamePattern());
@@ -73,7 +64,6 @@ public class GeneratorDao {
 				
 				table = new TableBean();
 				table.setTableName(tableName);
-				table.setJavaName(NameUtils.toUpperCaseFirstChar(JdbcUtils.convertUnderscoreNameToPropertyName(tableName)));
 				keyList = new ArrayList<ColumnBean>();
 				columnList = new ArrayList<ColumnBean>();
 				
@@ -117,14 +107,6 @@ public class GeneratorDao {
 						column.setColumnDef(rs.getString("COLUMN_DEF"));
 						column.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
 						column.setIsNullable(rs.getString("IS_NULLABLE"));
-						
-						// Java Properties Detail
-						column.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(column.getColumnName()));
-						column.setJavaType(dbTypeConverter.convert(column.getDataType(), column.getTypeName()));
-						
-						if (!criteria.getExcludeColumn().contains(column.getColumnName())) {
-							column.setGenerateFlag(Boolean.TRUE);
-						}
 						
 						if (index == -1) {
 							columnList.add(column);
