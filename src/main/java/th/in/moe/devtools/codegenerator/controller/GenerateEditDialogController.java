@@ -24,6 +24,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeItem.TreeModificationEvent;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import th.in.moe.devtools.codegenerator.common.bean.ColumnBean;
 import th.in.moe.devtools.codegenerator.common.bean.CustomEntityBean;
@@ -54,6 +56,10 @@ public class GenerateEditDialogController {
 	private List<TableBean> tableBeanList;
 	private Stage dialogStage;
 	private boolean okClicked = false;
+	
+	private Image tableImage = new Image(getClass().getResourceAsStream("/image/icon_table.png"));
+	private Image keyImage = new Image(getClass().getResourceAsStream("/image/icon_key.png"));
+	private Image columnImage = new Image(getClass().getResourceAsStream("/image/icon_column.png"));
 
 	/**
 	 * Initializes the controller class. This method is automatically called
@@ -92,7 +98,7 @@ public class GenerateEditDialogController {
 			tableEntity = new CustomEntityBean(tableBean.getTableName());
 			tableEntity.setDbTableName(tableBean.getTableName());
 			tableEntity.setJavaTableName(tableBean.getJavaName());
-			tableItem = createTreeItem(tableEntity);
+			tableItem = createTreeItem(tableEntity, tableImage);
 			
 			// Column Item
 			for (ColumnBean columnBean : tableBean.getKeyList()) {
@@ -103,7 +109,7 @@ public class GenerateEditDialogController {
 				columnEntity.setDbColumnName(columnBean.getColumnName());
 				columnEntity.setJavaColumnName(columnBean.getJavaName());
 				columnEntity.setJavaType(columnBean.getJavaType().getName());
-				tableItem.getChildren().add(createTreeItem(columnEntity));
+				tableItem.getChildren().add(createTreeItem(columnEntity, keyImage));
 			}
 			for (ColumnBean columnBean : tableBean.getColumnList()) {
 				columnEntity = new CustomEntityBean(columnBean.getColumnName());
@@ -113,7 +119,7 @@ public class GenerateEditDialogController {
 				columnEntity.setDbColumnName(columnBean.getColumnName());
 				columnEntity.setJavaColumnName(columnBean.getJavaName());
 				columnEntity.setJavaType(columnBean.getJavaType().getName());
-				tableItem.getChildren().add(createTreeItem(columnEntity));
+				tableItem.getChildren().add(createTreeItem(columnEntity, columnImage));
 			}
 			
 			rootItem.getChildren().add(tableItem);
@@ -147,8 +153,8 @@ public class GenerateEditDialogController {
 	}
 
 	// https://stackoverflow.com/questions/32478383/updating-treeview-items-from-textfield
-	private TreeItem<CustomEntityBean> createTreeItem(CustomEntityBean entityBean) {
-		TreeItem<CustomEntityBean> treeItem = new TreeItem<>(entityBean);
+	private TreeItem<CustomEntityBean> createTreeItem(CustomEntityBean entityBean, Image image) {
+		TreeItem<CustomEntityBean> treeItem = new TreeItem<>(entityBean, new ImageView(image));
 		if (treeItem.getValue().isTable()) {
 			// Table
 			// Java Table Name
