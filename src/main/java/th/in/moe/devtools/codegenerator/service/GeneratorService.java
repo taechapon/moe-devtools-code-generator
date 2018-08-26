@@ -70,6 +70,7 @@ public class GeneratorService {
 			for (ColumnBean keyColumnBean : tableBean.getKeyList()) {
 				keyColumnBean.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(keyColumnBean.getColumnName()));
 				keyColumnBean.setJavaType(dbTypeConverter.convert(keyColumnBean.getDataType(), keyColumnBean.getTypeName()));
+				keyColumnBean.setGenerateFlag(Boolean.TRUE);
 			}
 			for (ColumnBean columnBean : tableBean.getColumnList()) {
 				columnBean.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(columnBean.getColumnName()));

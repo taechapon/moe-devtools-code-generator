@@ -95,9 +95,20 @@ public class GenerateEditDialogController {
 			tableItem = createTreeItem(tableEntity);
 			
 			// Column Item
+			for (ColumnBean columnBean : tableBean.getKeyList()) {
+				columnEntity = new CustomEntityBean(columnBean.getColumnName());
+				columnEntity.setGenerateFlag(columnBean.isGenerateFlag());
+				columnEntity.setPrimaryKeyFlag(columnBean.isPrimaryKey());
+				columnEntity.setDbTableName(tableBean.getTableName());
+				columnEntity.setDbColumnName(columnBean.getColumnName());
+				columnEntity.setJavaColumnName(columnBean.getJavaName());
+				columnEntity.setJavaType(columnBean.getJavaType().getName());
+				tableItem.getChildren().add(createTreeItem(columnEntity));
+			}
 			for (ColumnBean columnBean : tableBean.getColumnList()) {
 				columnEntity = new CustomEntityBean(columnBean.getColumnName());
 				columnEntity.setGenerateFlag(columnBean.isGenerateFlag());
+				columnEntity.setPrimaryKeyFlag(columnBean.isPrimaryKey());
 				columnEntity.setDbTableName(tableBean.getTableName());
 				columnEntity.setDbColumnName(columnBean.getColumnName());
 				columnEntity.setJavaColumnName(columnBean.getJavaName());
@@ -223,6 +234,11 @@ public class GenerateEditDialogController {
 					entityAccordionPane.getPanes().get(0).setDisable(true);
 					entityAccordionPane.getPanes().get(1).setDisable(false);
 					generateFlagCheckBox.setSelected(entityBean.isGenerateFlag());
+					if (entityBean.isPrimaryKeyFlag()) {
+						generateFlagCheckBox.setDisable(true);
+					} else {
+						generateFlagCheckBox.setDisable(false);
+					}
 					javaColumnNameField.setText(entityBean.getJavaColumnName());
 					javaTypeComboBox.setValue(entityBean.getJavaType());
 				}

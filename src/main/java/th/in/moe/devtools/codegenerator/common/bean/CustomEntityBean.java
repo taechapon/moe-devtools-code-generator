@@ -20,6 +20,7 @@ public class CustomEntityBean {
 	private StringProperty javaTableName;
 	// Column Detail
 	private BooleanProperty generateFlag;
+	private BooleanProperty primaryKeyFlag;
 	private StringProperty dbColumnName;
 	private StringProperty javaColumnName;
 	private StringProperty javaType;
@@ -30,6 +31,7 @@ public class CustomEntityBean {
 		this.dbTableName = new SimpleStringProperty();
 		this.javaTableName = new SimpleStringProperty();
 		this.generateFlag = new SimpleBooleanProperty();
+		this.primaryKeyFlag = new SimpleBooleanProperty();
 		this.dbColumnName = new SimpleStringProperty();
 		this.javaColumnName = new SimpleStringProperty();
 		this.javaType = new SimpleStringProperty();
@@ -81,6 +83,18 @@ public class CustomEntityBean {
 
 	public BooleanProperty generateFlagProperty() {
 		return generateFlag;
+	}
+
+	public boolean isPrimaryKeyFlag() {
+		return primaryKeyFlag.get();
+	}
+
+	public void setPrimaryKeyFlag(boolean primaryKeyFlag) {
+		this.primaryKeyFlag.set(primaryKeyFlag);
+	}
+
+	public BooleanProperty primaryKeyFlagProperty() {
+		return primaryKeyFlag;
 	}
 
 	public String getDbColumnName() {
