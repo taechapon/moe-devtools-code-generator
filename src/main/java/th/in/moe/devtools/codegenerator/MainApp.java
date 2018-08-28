@@ -83,10 +83,8 @@ public class MainApp extends Application {
 			AnchorPane mainPage = (AnchorPane) loader.load();
 			
 			MainPageController controller = loader.getController();
-			controller.initialize();
 			controller.initForm();
 			controller.setMainApp(this);
-			mainPage.setUserData(controller);
 			
 			// Set MainPage into the center of RootLayout.
 			rootLayout.setCenter(mainPage);
