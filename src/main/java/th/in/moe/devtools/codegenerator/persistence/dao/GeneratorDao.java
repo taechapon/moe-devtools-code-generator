@@ -72,7 +72,7 @@ public class GeneratorDao {
 					while (rs.next()) {
 						column = new ColumnBean();
 						column.setColumnName(rs.getString("COLUMN_NAME"));
-						column.setPrimaryKey(Boolean.TRUE);
+						column.setPrimaryKeyFlag(Boolean.TRUE);
 						keyList.add(column);
 						
 						logger.debug(

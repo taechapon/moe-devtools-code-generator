@@ -75,9 +75,15 @@ public class GeneratorService {
 			for (ColumnBean columnBean : tableBean.getColumnList()) {
 				columnBean.setJavaName(JdbcUtils.convertUnderscoreNameToPropertyName(columnBean.getColumnName()));
 				columnBean.setJavaType(dbTypeConverter.convert(columnBean.getDataType(), columnBean.getTypeName()));
-				if (!criteria.getExcludeColumn().contains(columnBean.getColumnName())) {
+				if (criteria.getExcludeColumn() != null && criteria.getExcludeColumn().contains(columnBean.getColumnName())) {
+					columnBean.setGenerateFlag(Boolean.FALSE);
+				} else {
 					columnBean.setGenerateFlag(Boolean.TRUE);
 				}
+			}
+			if (tableBean.getKeyList().size() >= 2) {
+				tableBean.setCompositeKeyFlag(Boolean.TRUE);
+				tableBean.setJavaCompositeKeyName(tableBean.getJavaName() + NameUtils.PK_ENTITY);
 			}
 		}
 	}

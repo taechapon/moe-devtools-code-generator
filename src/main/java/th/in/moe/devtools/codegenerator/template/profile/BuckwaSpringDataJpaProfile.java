@@ -13,6 +13,7 @@ import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
 import th.in.moe.devtools.codegenerator.common.util.FileUtils;
 import th.in.moe.devtools.codegenerator.template.BuckwaJpaEntityTemplate;
 import th.in.moe.devtools.codegenerator.template.BuckwaSpringDataJpaRepositoryTemplate;
+import th.in.moe.devtools.codegenerator.template.JpaEmbeddableTemplate;
 
 /*
  * @Author: Taechapon Himarat (Su)
@@ -22,11 +23,14 @@ public class BuckwaSpringDataJpaProfile implements ProfileTemplate {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BuckwaSpringDataJpaProfile.class);
 	
+	private JpaEmbeddableTemplate jpaEmbeddableTemplate;
 	private BuckwaJpaEntityTemplate buckwaJpaEntityTemplate;
 	private BuckwaSpringDataJpaRepositoryTemplate buckwaSpringDataJpaRepositoryTemplate;
 	
-	public BuckwaSpringDataJpaProfile(BuckwaJpaEntityTemplate buckwaJpaEntityTemplate,
+	public BuckwaSpringDataJpaProfile(JpaEmbeddableTemplate jpaEmbeddableTemplate,
+			BuckwaJpaEntityTemplate buckwaJpaEntityTemplate,
 			BuckwaSpringDataJpaRepositoryTemplate buckwaSpringDataJpaRepositoryTemplate) {
+		this.jpaEmbeddableTemplate = jpaEmbeddableTemplate;
 		this.buckwaJpaEntityTemplate = buckwaJpaEntityTemplate;
 		this.buckwaSpringDataJpaRepositoryTemplate = buckwaSpringDataJpaRepositoryTemplate;
 	}
@@ -34,6 +38,10 @@ public class BuckwaSpringDataJpaProfile implements ProfileTemplate {
 	@Override
 	public void generate(GeneratorCriteria criteria, TableBean table) throws GeneratedException {
 		try {
+			if (table.isCompositeKeyFlag()) {
+				JCodeModel pkModel = jpaEmbeddableTemplate.execute(criteria, table);
+				FileUtils.buildJCodeModel(new File(criteria.getResultPath()), pkModel);
+			}
 			JCodeModel entityModel = buckwaJpaEntityTemplate.execute(criteria, table);
 			FileUtils.buildJCodeModel(new File(criteria.getResultPath()), entityModel);
 			if (table.getKeyList() != null && table.getKeyList().size() > 0) {

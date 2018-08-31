@@ -25,10 +25,9 @@ public class PojoTemplate implements Template {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PojoTemplate.class);
 	
-	public JCodeModel execute(GeneratorCriteria criteria, TableBean table, Object... obj) throws JClassAlreadyExistsException {
+	public JCodeModel execute(GeneratorCriteria criteria, TableBean table) throws JClassAlreadyExistsException {
 		
-		String packageName = criteria.getResultEntityPackage();
-		String fullyqualifiedName = packageName + "." + table.getJavaName();
+		String fullyqualifiedName = criteria.getResultEntityPackage() + "." + table.getJavaName();
 		
 		// Generate Class
 		JCodeModel pojoModel = new JCodeModel();

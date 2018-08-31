@@ -10,18 +10,20 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @Create: Sep 14, 2012
  */
 public class TableBean {
-	
+
 	// Database
 	private String tableName;
 	private List<ColumnBean> keyList;
 	private List<ColumnBean> columnList;
 	// Java
 	private String javaName;
-	
+	private boolean isCompositeKeyFlag;
+	private String javaCompositeKeyName;
+
 	public String getTableName() {
 		return tableName;
 	}
-	
+
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
@@ -41,7 +43,7 @@ public class TableBean {
 	public void setColumnList(List<ColumnBean> columnList) {
 		this.columnList = columnList;
 	}
-	
+
 	public String getJavaName() {
 		return javaName;
 	}
@@ -49,13 +51,31 @@ public class TableBean {
 	public void setJavaName(String javaName) {
 		this.javaName = javaName;
 	}
-	
-	/* (non-Javadoc)
+
+	public boolean isCompositeKeyFlag() {
+		return isCompositeKeyFlag;
+	}
+
+	public void setCompositeKeyFlag(boolean isCompositeKeyFlag) {
+		this.isCompositeKeyFlag = isCompositeKeyFlag;
+	}
+
+	public String getJavaCompositeKeyName() {
+		return javaCompositeKeyName;
+	}
+
+	public void setJavaCompositeKeyName(String javaCompositeKeyName) {
+		this.javaCompositeKeyName = javaCompositeKeyName;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
-	
+
 }

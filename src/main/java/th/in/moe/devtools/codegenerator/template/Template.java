@@ -5,7 +5,6 @@ import com.sun.codemodel.JCodeModel;
 
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
-import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
 
 /*
  * @Author: Taechapon Himarat (Su)
@@ -13,6 +12,6 @@ import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
  */
 public interface Template {
 	
-	public JCodeModel execute(GeneratorCriteria criteria, TableBean table, Object... obj) throws GeneratedException, JClassAlreadyExistsException;
+	public JCodeModel execute(GeneratorCriteria criteria, TableBean table) throws JClassAlreadyExistsException;
 	
 }

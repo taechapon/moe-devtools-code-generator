@@ -104,7 +104,7 @@ public class GenerateEditDialogController {
 			for (ColumnBean columnBean : tableBean.getKeyList()) {
 				columnEntity = new CustomEntityBean(columnBean.getColumnName());
 				columnEntity.setGenerateFlag(columnBean.isGenerateFlag());
-				columnEntity.setPrimaryKeyFlag(columnBean.isPrimaryKey());
+				columnEntity.setPrimaryKeyFlag(columnBean.isPrimaryKeyFlag());
 				columnEntity.setDbTableName(tableBean.getTableName());
 				columnEntity.setDbColumnName(columnBean.getColumnName());
 				columnEntity.setJavaColumnName(columnBean.getJavaName());
@@ -114,7 +114,7 @@ public class GenerateEditDialogController {
 			for (ColumnBean columnBean : tableBean.getColumnList()) {
 				columnEntity = new CustomEntityBean(columnBean.getColumnName());
 				columnEntity.setGenerateFlag(columnBean.isGenerateFlag());
-				columnEntity.setPrimaryKeyFlag(columnBean.isPrimaryKey());
+				columnEntity.setPrimaryKeyFlag(columnBean.isPrimaryKeyFlag());
 				columnEntity.setDbTableName(tableBean.getTableName());
 				columnEntity.setDbColumnName(columnBean.getColumnName());
 				columnEntity.setJavaColumnName(columnBean.getJavaName());
@@ -313,6 +313,7 @@ public class GenerateEditDialogController {
 	@FXML
 	private void handleOk() {
 		try {
+			// Update value from tableColumnTreeView to tableBeanList
 			int tableSize = tableBeanList.size();
 			TableBean tableBean = null;
 			TreeItem<CustomEntityBean> tableItem = null;
@@ -321,6 +322,7 @@ public class GenerateEditDialogController {
 				tableBean = tableBeanList.get(i);
 				tableItem = tableColumnTreeView.getRoot().getChildren().get(i);
 				tableBean.setJavaName(tableItem.getValue().getJavaTableName());
+				// Update keyList
 				for (ColumnBean columnBean : tableBean.getKeyList()) {
 					columnItemList = tableItem.getChildren();
 					for (TreeItem<CustomEntityBean> columnItem : columnItemList) {
@@ -330,6 +332,7 @@ public class GenerateEditDialogController {
 						}
 					}
 				}
+				// Update columnList
 				for (ColumnBean columnBean : tableBean.getColumnList()) {
 					columnItemList = tableItem.getChildren();
 					for (TreeItem<CustomEntityBean> columnItem : columnItemList) {
@@ -341,7 +344,6 @@ public class GenerateEditDialogController {
 					}
 				}
 			}
-			//tableBeanList.forEach(System.out::println);
 			
 			generatorService.genJavaFromTable(this.criteria, tableBeanList);
 			

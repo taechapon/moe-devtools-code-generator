@@ -3,7 +3,6 @@ package th.in.moe.devtools.codegenerator.service;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.BeforeClass;
@@ -34,7 +33,7 @@ public class GeneratorServiceTestMySQL {
 		criteria.setDatasourceBean(datasourceBean);
 		criteria.setDbCatalog("");
 		criteria.setDbSchema("");
-		criteria.setDbTableNamePattern("");
+		criteria.setDbTableNamePattern("%");
 		criteria.setResultPath("./src/test/java");
 		criteria.setResultEntityPackage("com.ss.erp.ap.persistence.entity");
 		criteria.setResultRepositoryPackage("com.ss.erp.ap.persistence.repository");
@@ -46,11 +45,9 @@ public class GeneratorServiceTestMySQL {
 	}
 	
 	@Test
-	public void test_getAllTableName() throws GeneratedException, Exception {
-//		List<String> tableNameList = generatorService.getAllTableName(criteria);
-//		tableNameList.forEach(System.out::println);
-		System.out.println(Class.forName("java.lang.Integer"));
-		System.out.println(Integer.class);
+	public void test_getAllTableName() throws GeneratedException {
+		List<String> tableNameList = generatorService.getAllTableName(criteria);
+		tableNameList.forEach(System.out::println);
 	}
 	
 	//@Test

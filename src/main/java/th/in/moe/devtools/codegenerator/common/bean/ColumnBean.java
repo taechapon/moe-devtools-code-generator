@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @Create: Sep 14, 2012
  */
 public class ColumnBean {
-	
+
 	// Database
 	private String columnName;
 	private int dataType;
@@ -26,7 +26,7 @@ public class ColumnBean {
 	private boolean generateFlag;
 	private String javaName;
 	private Class<?> javaType;
-	private boolean primaryKey;
+	private boolean primaryKeyFlag;
 
 	public String getColumnName() {
 		return columnName;
@@ -148,15 +148,17 @@ public class ColumnBean {
 		this.javaType = javaType;
 	}
 
-	public boolean isPrimaryKey() {
-		return primaryKey;
+	public boolean isPrimaryKeyFlag() {
+		return primaryKeyFlag;
 	}
 
-	public void setPrimaryKey(boolean primaryKey) {
-		this.primaryKey = primaryKey;
+	public void setPrimaryKeyFlag(boolean primaryKeyFlag) {
+		this.primaryKeyFlag = primaryKeyFlag;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -167,7 +169,9 @@ public class ColumnBean {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -191,5 +195,5 @@ public class ColumnBean {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
-	
+
 }

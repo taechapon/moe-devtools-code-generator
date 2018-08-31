@@ -1,7 +1,5 @@
 package th.in.moe.devtools.codegenerator.template;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,10 +7,7 @@ import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JFieldVar;
-import com.sun.codemodel.JMod;
 
-import th.in.moe.devtools.codegenerator.common.bean.ColumnBean;
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
 import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.TO_STRING_STYLE;
@@ -22,14 +17,13 @@ import th.in.moe.devtools.codegenerator.common.util.CodeModelUtils;
  * @Author: Taechapon Himarat (Su)
  * @Create: Jul 25, 2018
  */
-public class JpaEntityTemplate implements Template {
+public class JpaEntityTemplate extends AbstractJpaEntityTemplate implements Template {
 	
 	private static final Logger logger = LoggerFactory.getLogger(JpaEntityTemplate.class);
 	
-	public JCodeModel execute(GeneratorCriteria criteria, TableBean table, Object... obj) throws JClassAlreadyExistsException {
+	public JCodeModel execute(GeneratorCriteria criteria, TableBean table) throws JClassAlreadyExistsException {
 		
-		String packageName = criteria.getResultEntityPackage();
-		String fullyqualifiedName = packageName + "." + table.getJavaName();
+		String fullyqualifiedName = criteria.getResultEntityPackage() + "." + table.getJavaName();
 		
 		// Generate Class
 		JCodeModel entityModel = new JCodeModel();
@@ -39,10 +33,10 @@ public class JpaEntityTemplate implements Template {
 		entityClass.annotate(javax.persistence.Table.class).param("name", table.getTableName());
 		
 		// Generate Primary Key Field and Method
-		generateColumnField(criteria, entityClass, table.getTableName(), table.getKeyList());
+		generatePrimaryKeyField(criteria, entityClass, table);
 		
 		// Generate Column Field and Method
-		generateColumnField(criteria, entityClass, table.getTableName(), table.getColumnList());
+		generateColumnField(entityClass, table.getTableName(), table.getColumnList());
 		
 		// Generate toString()
 		if (!TO_STRING_STYLE.NONE.equals(criteria.getToStringMethodStyle())) {
@@ -52,26 +46,6 @@ public class JpaEntityTemplate implements Template {
 		logger.info("Generate {} Success", fullyqualifiedName);
 		
 		return entityModel;
-	}
-	
-	private void generateColumnField(GeneratorCriteria criteria, JDefinedClass entityClass, String tableName, List<ColumnBean> columnList) {
-		for (ColumnBean column : columnList) {
-			if (column.isGenerateFlag()) {
-				// Generate Field
-				JFieldVar field = entityClass.field(JMod.PRIVATE, column.getJavaType(), column.getJavaName());
-				if (column.isPrimaryKey()) {
-					field.annotate(javax.persistence.Id.class);
-					CodeModelUtils.generateJpaPrimaryKeyAnnotation(field, criteria.getDatasourceBean().getDatabaseProductionName(), tableName);
-				}
-				field.annotate(javax.persistence.Column.class).param("name", column.getColumnName());
-				
-				// Generate Getter Method
-				CodeModelUtils.generateGetterMethod(entityClass, column.getJavaType(), column.getJavaName());
-				
-				// Generate Setter Method
-				CodeModelUtils.generateSetterMethod(entityClass, column.getJavaType(), column.getJavaName());
-			}
-		}
 	}
 	
 }

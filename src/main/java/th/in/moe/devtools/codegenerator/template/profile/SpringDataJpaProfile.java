@@ -11,6 +11,7 @@ import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
 import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
 import th.in.moe.devtools.codegenerator.common.util.FileUtils;
+import th.in.moe.devtools.codegenerator.template.JpaEmbeddableTemplate;
 import th.in.moe.devtools.codegenerator.template.JpaEntityTemplate;
 import th.in.moe.devtools.codegenerator.template.SpringDataJpaRepositoryTemplate;
 
@@ -22,11 +23,14 @@ public class SpringDataJpaProfile implements ProfileTemplate {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SpringDataJpaProfile.class);
 	
+	private JpaEmbeddableTemplate jpaEmbeddableTemplate;
 	private JpaEntityTemplate jpaEntityTemplate;
 	private SpringDataJpaRepositoryTemplate springDataJpaRepositoryTemplate;
 	
-	public SpringDataJpaProfile(JpaEntityTemplate jpaEntityTemplate,
-		SpringDataJpaRepositoryTemplate springDataJpaRepositoryTemplate) {
+	public SpringDataJpaProfile(JpaEmbeddableTemplate jpaEmbeddableTemplate,
+			JpaEntityTemplate jpaEntityTemplate,
+			SpringDataJpaRepositoryTemplate springDataJpaRepositoryTemplate) {
+		this.jpaEmbeddableTemplate = jpaEmbeddableTemplate;
 		this.jpaEntityTemplate = jpaEntityTemplate;
 		this.springDataJpaRepositoryTemplate = springDataJpaRepositoryTemplate;
 	}
@@ -34,6 +38,10 @@ public class SpringDataJpaProfile implements ProfileTemplate {
 	@Override
 	public void generate(GeneratorCriteria criteria, TableBean table) throws GeneratedException {
 		try {
+			if (table.isCompositeKeyFlag()) {
+				JCodeModel pkModel = jpaEmbeddableTemplate.execute(criteria, table);
+				FileUtils.buildJCodeModel(new File(criteria.getResultPath()), pkModel);
+			}
 			JCodeModel entityModel = jpaEntityTemplate.execute(criteria, table);
 			FileUtils.buildJCodeModel(new File(criteria.getResultPath()), entityModel);
 			if (table.getKeyList() != null && table.getKeyList().size() > 0) {

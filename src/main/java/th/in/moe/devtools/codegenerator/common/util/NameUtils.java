@@ -6,6 +6,9 @@ package th.in.moe.devtools.codegenerator.common.util;
  */
 public abstract class NameUtils {
 	
+	public static final String PK_ENTITY = "PK";
+	public static final String PK_ENTITY_ATTR_NAME = "id";
+	
 	// Getter and Setter
 	private static final String GET = "get";
 	private static final String SET = "set";

@@ -2,8 +2,10 @@ package th.in.moe.devtools.codegenerator.common.util;
 
 import javax.persistence.GenerationType;
 
+import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClass;
+import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
@@ -89,6 +91,11 @@ public abstract class CodeModelUtils {
 				.param("allocationSize", 1);
 		}
 		return field;
+	}
+	
+	public static JDefinedClass getJDefinedClass(String className) throws JClassAlreadyExistsException {
+		JCodeModel baseEntityModel = new JCodeModel();
+		return baseEntityModel._class(className, ClassType.CLASS);
 	}
 	
 }

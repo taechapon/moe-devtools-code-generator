@@ -85,6 +85,7 @@ public class MainApp extends Application {
 			MainPageController controller = loader.getController();
 			controller.initForm();
 			controller.setMainApp(this);
+			mainPage.setUserData(controller);
 			
 			// Set MainPage into the center of RootLayout.
 			rootLayout.setCenter(mainPage);

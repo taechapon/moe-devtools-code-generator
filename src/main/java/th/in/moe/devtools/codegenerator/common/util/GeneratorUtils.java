@@ -6,6 +6,7 @@ import th.in.moe.devtools.codegenerator.common.constant.GeneratorConstant.DATABA
 import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
 import th.in.moe.devtools.codegenerator.template.BuckwaJpaEntityTemplate;
 import th.in.moe.devtools.codegenerator.template.BuckwaSpringDataJpaRepositoryTemplate;
+import th.in.moe.devtools.codegenerator.template.JpaEmbeddableTemplate;
 import th.in.moe.devtools.codegenerator.template.JpaEntityTemplate;
 import th.in.moe.devtools.codegenerator.template.PojoTemplate;
 import th.in.moe.devtools.codegenerator.template.SpringDataJpaRepositoryTemplate;
@@ -45,19 +46,23 @@ public abstract class GeneratorUtils {
 			PojoTemplate pojoTemplate = new PojoTemplate();
 			profileTemplate = new PojoProfile(pojoTemplate);
 		} else if (GeneratorConstant.ProfileTemplate.JPA_ENTITY.equals(profile)) {
+			JpaEmbeddableTemplate jpaEmbeddableTemplate = new JpaEmbeddableTemplate();
 			JpaEntityTemplate jpaEntityTemplate = new JpaEntityTemplate();
-			profileTemplate = new JpaEntityProfile(jpaEntityTemplate);
+			profileTemplate = new JpaEntityProfile(jpaEmbeddableTemplate, jpaEntityTemplate);
 		} else if (GeneratorConstant.ProfileTemplate.SPRING_DATA_JPA.equals(profile)) {
+			JpaEmbeddableTemplate jpaEmbeddableTemplate = new JpaEmbeddableTemplate();
 			JpaEntityTemplate jpaEntityTemplate = new JpaEntityTemplate();
 			SpringDataJpaRepositoryTemplate springDataJpaRepositoryTemplate = new SpringDataJpaRepositoryTemplate();
-			profileTemplate = new SpringDataJpaProfile(jpaEntityTemplate, springDataJpaRepositoryTemplate);
+			profileTemplate = new SpringDataJpaProfile(jpaEmbeddableTemplate, jpaEntityTemplate, springDataJpaRepositoryTemplate);
 		} else if (GeneratorConstant.ProfileTemplate.BUCKWA_JPA_ENTITY.equals(profile)) {
+			JpaEmbeddableTemplate jpaEmbeddableTemplate = new JpaEmbeddableTemplate();
 			BuckwaJpaEntityTemplate buckwaJpaEntityTemplate = new BuckwaJpaEntityTemplate();
-			profileTemplate = new BuckwaJpaEntityProfile(buckwaJpaEntityTemplate);
+			profileTemplate = new BuckwaJpaEntityProfile(jpaEmbeddableTemplate, buckwaJpaEntityTemplate);
 		} else if (GeneratorConstant.ProfileTemplate.BUCKWA_SPRING_DATA_JPA.equals(profile)) {
+			JpaEmbeddableTemplate jpaEmbeddableTemplate = new JpaEmbeddableTemplate();
 			BuckwaJpaEntityTemplate buckwaJpaEntityTemplate = new BuckwaJpaEntityTemplate();
 			BuckwaSpringDataJpaRepositoryTemplate buckwaSpringDataJpaRepositoryTemplate = new BuckwaSpringDataJpaRepositoryTemplate();
-			profileTemplate = new BuckwaSpringDataJpaProfile(buckwaJpaEntityTemplate, buckwaSpringDataJpaRepositoryTemplate);
+			profileTemplate = new BuckwaSpringDataJpaProfile(jpaEmbeddableTemplate, buckwaJpaEntityTemplate, buckwaSpringDataJpaRepositoryTemplate);
 		}
 		
 		return profileTemplate;

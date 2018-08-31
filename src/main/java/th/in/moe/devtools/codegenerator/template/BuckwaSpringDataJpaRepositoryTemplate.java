@@ -11,7 +11,7 @@ import com.sun.codemodel.JDefinedClass;
 
 import th.in.moe.devtools.codegenerator.common.bean.GeneratorCriteria;
 import th.in.moe.devtools.codegenerator.common.bean.TableBean;
-import th.in.moe.devtools.codegenerator.common.exception.GeneratedException;
+import th.in.moe.devtools.codegenerator.common.util.CodeModelUtils;
 
 /*
  * @Author: Taechapon Himarat (Su)
@@ -25,16 +25,23 @@ public class BuckwaSpringDataJpaRepositoryTemplate implements Template {
 	private static final String REPOSITORY = "Repository";
 	
 	@Override
-	public JCodeModel execute(GeneratorCriteria criteria, TableBean table, Object... obj) throws GeneratedException, JClassAlreadyExistsException {
+	public JCodeModel execute(GeneratorCriteria criteria, TableBean table) throws JClassAlreadyExistsException {
 		
-		String packageName = criteria.getResultRepositoryPackage();
-		String fullyqualifiedName = packageName + "." + table.getJavaName() + REPOSITORY;
+		String fullyqualifiedName = criteria.getResultRepositoryPackage() + "." + table.getJavaName() + REPOSITORY;
+		
+		// ID
+		JDefinedClass idClass = null;
+		if (table.isCompositeKeyFlag()) {
+			idClass = CodeModelUtils.getJDefinedClass(criteria.getResultEntityPackage() + "." + table.getJavaCompositeKeyName());
+		} else {
+			idClass = CodeModelUtils.getJDefinedClass(table.getKeyList().get(0).getJavaType().getName());
+		}
 		
 		// CommonJpaCrudRepository
 		JCodeModel buckwaCrudRepositoryModel = new JCodeModel();
 		JClass buckwaCrudRepositoryClass = buckwaCrudRepositoryModel._class(BUCKWA_CRUD_REPOSITORY_INTERFACE, ClassType.INTERFACE).narrow(
-			buckwaCrudRepositoryModel.ref(criteria.getResultEntityPackage() + "." + table.getJavaName()),
-			buckwaCrudRepositoryModel.ref(table.getKeyList().get(0).getJavaType())
+			CodeModelUtils.getJDefinedClass(criteria.getResultEntityPackage() + "." + table.getJavaName()),
+			idClass
 		);
 		
 		// Generate Class
